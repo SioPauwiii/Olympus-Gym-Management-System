@@ -1,156 +1,187 @@
-# ⚡ Olympus Gym Management System - Core Backend Engine & Architecture
+# ⚡ Olympus Gym Management System - Full-Stack Architecture & Platform
 
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.5+-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white)](https://vuejs.org/)
+[![Vite](https://img.shields.io/badge/Vite-5.4+-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![PHP](https://img.shields.io/badge/PHP-8.1+-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![JWT](https://img.shields.io/badge/JWT-Authentication-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
-[![Security](https://img.shields.io/badge/Security-RBAC_%7C_PDO-success?style=for-the-badge)](https://www.php.net/manual/en/book.pdo.php)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
-> A high-performance, enterprise-grade server-side architecture powering gym management operations, client-coach relations, background scheduling, health calculation algorithms, and intelligent fitness recommendation services.
+> A full-stack, enterprise-grade gym management platform featuring a responsive Vue 3 Single Page Application (SPA), high-throughput PHP 8 RESTful API engine, automated background scheduler, biometric nutritional algorithms, and multi-vector fitness recommendation services.
 
 ---
 
 ## 📌 Repository Summary (For GitHub Description)
 
 ```text
-High-performance PHP 8 RESTful API & Management System for gym operations featuring Role-Based Access Control (RBAC), custom HMAC-SHA256 JWT auth with state-persisted token blacklisting, Harris-Benedict BMR/TDEE nutrition calculation engine, multi-factor recommendation system, automated background notifications, and PDO transactional database safety.
+Full-stack Vue 3 & PHP 8 Gym Management System featuring Role-Based Access Control (RBAC), custom HMAC-SHA256 JWT auth with state-persisted token blacklisting, Harris-Benedict BMR/TDEE nutrition calculation engine, multi-factor recommendation system, automated background notifications, and PDO transactional database safety.
 ```
 
 ---
 
 ## 📋 Executive Summary & Portfolio Overview
 
-The **Olympus Gym Management System** is a robust backend engine engineered to streamline complex fitness center operations. Designed around a lightweight Model-View-Controller (MVC) architectural pattern, the platform provides secure RESTful communication, strict Role-Based Access Control (RBAC), transactional database reliability, and automated health analytics.
+The **Olympus Gym Management System** is a complete end-to-end software platform designed to digitize fitness center operations, member management, trainer client rosters, nutritional tracking, and scheduled communication.
+
+Architected with a decoupled full-stack design, the system pairs an intuitive **Vue 3 Single Page Application** with a high-performance **PHP 8 RESTful API engine** backed by a relational database and an automated asynchronous background scheduler.
 
 ### 🌟 Core Capabilities
-- **Role-Based Access Control (RBAC)**: Enforces distinct access boundaries and operational permissions for Administrators, Coaches, and Members.
-- **Token Security & Revocation Layer**: Implements a custom HMAC-SHA256 JWT architecture coupled with persistent token blacklisting for immediate server-side revocation upon session termination.
-- **Biometric & Nutritional Calculation Engine**: Computes sex-adjusted Basal Metabolic Rates (BMR) using the Harris-Benedict equation, Total Daily Energy Expenditure (TDEE) based on activity multipliers, target caloric adjustments, and macronutrient yields.
-- **Multi-Attribute Recommendation Service**: Uses profile-matching logic (evaluating physical activity, body composition, age bracket, fitness targets, and experience) to recommend personalized training and nutrition regimes.
-- **Asynchronous Lifecycle Scheduler**: Automated background service handling notification dispatch for membership expiry alerts, visit scheduling, and session reminders over encrypted email protocols.
-- **ACID-Compliant Data Processing**: Enforces atomic transactions across multi-entity data workflows to guarantee consistency and eliminate partial state corruption.
+- **Decoupled Full-Stack Architecture**: Modern Vue 3 SPA client communicating asynchronously via RESTful HTTP calls to a lightweight, custom MVC server engine.
+- **Client & Server Role-Based Access Control (RBAC)**: Unified security model enforcing client-side navigation routing guards and server-side permission checks across Administrators, Coaches, and Members.
+- **Hybrid Token Security & Revocation**: Cryptographic HMAC-SHA256 JWT authentication supported by a persistent database revocation blacklist for immediate session invalidation upon logout.
+- **Biometric & Nutritional Analytics Engine**: Automated Basal Metabolic Rate (BMR) calculations using the sex-specific Harris-Benedict equation, Total Daily Energy Expenditure (TDEE) multipliers, goal-oriented caloric adjustments, and macronutrient yields.
+- **Multi-Attribute Recommendation Engine**: Automated profile matching that evaluates physical metrics, body composition, activity levels, and fitness goals to recommend tailored workout and diet plans.
+- **Role-Dedicated Web Consoles**: Tailored dashboards for Members (health tracking, alarms, coach booking, class enrollment), Coaches (client rosters, metric inspection, direct emailing), and Admins (member CRUD, subscription management, medical registries).
+- **Asynchronous Lifecycle Scheduler**: Background worker automated for membership expiration warnings, session schedule alerts, and daily visit notifications via SMTP.
 
 ---
 
 ## 📐 System Architecture & Data Flow
 
-### 1. High-Level System Architecture
+### 1. Full-Stack End-to-End Architecture
 
 ```mermaid
 graph TD
-    Client[Client Applications / API Consumers] -->|RESTful Requests| Gateway[Web Server Gateway]
-    Gateway --> FrontController[Front Controller Router]
-
-    subgraph Security & Middleware
-        FrontController --> CORSPolicy[CORS & Preflight Handling]
-        FrontController --> TokenAuth[JWT Authentication & Blacklist Verification]
+    subgraph Client Presentation Layer
+        UserBrowser[User Web Browser] --> VueApp[Vue 3 Single Page Application]
+        VueApp --> VueRouter[Vue Router 4 Navigation Guards]
+        VueApp --> StateManager[State & Axios HTTP Client]
     end
 
-    subgraph Domain Services
-        TokenAuth -->|Admin Role| AdminService[Administrative Control Module]
-        TokenAuth -->|Coach Role| CoachService[Coach & Client Management Module]
-        TokenAuth -->|Member Role| MemberService[Member Operations Module]
-        TokenAuth -->|Public / Auth| AuthService[Identity & Authentication Module]
+    subgraph Server Gateway & Security
+        StateManager -->|JSON REST Requests| Gateway[Web Server Gateway]
+        Gateway --> FrontController[Front Controller Router]
+        FrontController --> CORSMiddleware[CORS Policy & Preflight Handler]
+        FrontController --> SecurityGuard[JWT Authentication & Blacklist Guard]
     end
 
-    subgraph Business Engines
-        MemberService --> NutritionEngine[BMR & Caloric Calculation Engine]
-        MemberService --> MatchingEngine[Multi-Vector Recommendation Engine]
-        AdminService --> SubscriptionEngine[Membership Lifecycle Engine]
+    subgraph Business Logic & Domain Services
+        SecurityGuard -->|Admin Credentials| AdminModule[Administrative Operations Module]
+        SecurityGuard -->|Coach Credentials| CoachModule[Coach & Client Management Module]
+        SecurityGuard -->|Member Credentials| MemberModule[Member Operations Module]
+        SecurityGuard -->|Public / Auth| AuthModule[Identity & Session Service]
     end
 
-    subgraph Persistence & External Services
-        AdminService & CoachService & MemberService & AuthService -->|Parameterized PDO| DataStore[(Relational Database)]
-        CoachService & MemberService --> EmailGateway[SMTP Notification Gateway]
+    subgraph Analytical Engines
+        MemberModule --> BMRCalculator[BMR & Caloric Expenditure Engine]
+        MemberModule --> PlanMatcher[Multi-Vector Recommendation Engine]
+        AdminModule --> SubscriptionEngine[Subscription Lifecycle Engine]
+    end
+
+    subgraph Persistence & External Systems
+        AdminModule & CoachModule & MemberModule & AuthModule -->|Parameterized PDO| RelationalDB[(Relational Database)]
+        CoachModule & MemberModule --> SMTPGateway[SMTP Email Gateway]
     end
 
     subgraph Automated Worker Subsystem
-        Scheduler[Background Job Scheduler] -->|Periodic Tasks| FrontController
+        BackgroundWorker[Background Job Scheduler] -->|Periodic Automated Requests| FrontController
     end
 ```
 
 ---
 
-### 2. Authentication & Session Revocation Flow
+### 2. Full-Stack Authentication & Route Guarding Flow
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor User
-    participant Gateway as Central Gateway
-    participant Auth as Identity Service
-    participant DB as Data Persistence
+    participant VueClient as Vue 3 Client (SPA)
+    participant RouterGuard as Vue Router Guard
+    participant API as API Server Engine
+    participant DB as Data Store
     
-    User->>Gateway: Submit Login Credentials
-    Gateway->>Auth: Process Authentication
-    Auth->>DB: Query User Profile & Hashed Password
-    DB-->>Auth: User Record
-    Auth->>Auth: Verify Cryptographic Hash
+    User->>VueClient: Enter Credentials & Submit
+    VueClient->>API: Asynchronous POST Login Request
+    API->>DB: Query User Record & BCrypt Password Hash
+    DB-->>API: User Data Record
+    API->>API: Verify Password Cryptographic Hash
     alt Invalid Credentials
-        Auth-->>User: Authentication Failure Response
+        API-->>VueClient: Return Error Status & Remarks
+        VueClient-->>User: Display Form Error Notice
     else Valid Credentials
-        Auth->>Auth: Generate Signed HMAC-SHA256 Token
-        Auth-->>User: Secure Token Payload
+        API->>API: Generate Signed HMAC-SHA256 JWT
+        API-->>VueClient: Return Token & Secure Authorization Cookie
+        VueClient->>RouterGuard: Store Auth State & Role Meta
+        RouterGuard->>VueClient: Redirect to Role Dashboard
     end
 
-    note over User, Gateway: Protected Resource Access
-    User->>Gateway: Request Protected Resource + Bearer Token
-    Gateway->>Auth: Validate Token & Role Permissions
-    Auth->>DB: Check Revocation Blacklist
-    alt Token Revoked or Expired
-        Auth-->>User: Unauthorized Response
+    note over User, API: Protected Navigation (e.g., Member Dashboard)
+    User->>VueClient: Navigate to Protected Route
+    VueClient->>RouterGuard: Intercept Navigation Target
+    RouterGuard->>API: Verify Token Validity & Role Authorization
+    API->>DB: Query Revocation Blacklist Registry
+    alt Token Revoked or Role Mismatch
+        API-->>RouterGuard: Token Invalid / Unauthorized
+        RouterGuard-->>VueClient: Redirect to Central Login Portal
     else Token Valid
-        Auth->>Gateway: Access Granted
-        Gateway->>DB: Execute Transaction
-        DB-->>Gateway: Data Payload
-        Gateway-->>User: Standardized Data Response
+        API-->>RouterGuard: Token Validated
+        RouterGuard->>VueClient: Render Dashboard Component
     end
-
-    note over User, Gateway: Session Termination
-    User->>Gateway: Logout Request
-    Gateway->>Auth: Revoke Token
-    Auth->>DB: Persist Token Signature to Blacklist
-    Auth-->>User: Session Terminated
 ```
 
 ---
 
-### 3. Recommendation Engine Workflow
+### 3. Recommendation Engine Data Pipeline
 
 ```mermaid
 flowchart LR
-    Inputs[User Physical Metrics & Profile Data] --> Preprocess[Normalize & Categorize Attributes]
-    Preprocess --> MultiMatch[Apply Multi-Vector Match Scoring Algorithm]
-    MultiMatch --> Evaluator[Rank Candidates by Compatibility Score]
-    Evaluator --> Output[Return Optimized Workout & Diet Plan]
+    Metrics[User Biometric Profile: Age, Weight, Height, Activity, Body Type] --> Normalizer[Normalize Attributes & Determine Age Bracket]
+    Normalizer --> TargetInputs[Receive Goal & Experience Level]
+    TargetInputs --> VectorMatcher[Compute Vector Match Score against Knowledge Base]
+    VectorMatcher --> Ranker[Rank & Sort Regimens by Match Score]
+    Ranker --> Result[Deliver Customized Workout Plan, Diet Plan, & Notes]
 ```
 
 ---
 
-## 🧠 Core Engineering & System Design
+## 💻 Frontend Client Architecture & Feature Suite
 
-### 1. Unified Front Controller Pattern
-The backend employs a lightweight front controller design pattern that centralizes request routing, request sanitization, and global exception handling. All inbound network traffic is routed through a single entry point that dynamically dispatches requests to the appropriate domain service based on HTTP verb semantics and validated authorization scopes.
+The user interface is structured as a modern Single Page Application (SPA) built with **Vue 3** and compiled via **Vite**. It leverages **Vue Router 4** for role-gated navigation, **Axios** for asynchronous network requests, **FontAwesome 6** for responsive iconography, and **Moment.js** for timestamp formatting.
 
-### 2. Hybrid Stateless Token Security with Persistent Revocation
-To maintain the performance advantages of stateless token authentication while fulfilling enterprise security requirements, the architecture incorporates a hybrid revocation system:
-- Access tokens are cryptographically signed using HMAC-SHA256 and contain embedded expiry constraints and unique identifiers.
-- Upon explicit logout, token signatures are stored in a persistent database blacklist store.
-- Protected route middleware cross-references incoming tokens against the revocation store, ensuring immediate session termination without invalidating active non-revoked sessions.
+### 🌐 1. Public Information Portal
+- **Landing Gateway**: Responsive homepage presenting facility highlights, fitness programs, and calls-to-action.
+- **Informational Pages**: Specialized views detailing company background, service catalog, coaching staff bios, and contact forms.
+- **Central Authentication Hub**: Unified login interface routing users to dedicated portal gateways based on user type.
 
-### 3. Transactional Integrity & State Safety
-Complex business operations—such as multi-entity user registration—require strict atomic guarantees. The data layer utilizes explicit database transaction blocks:
-- Transaction boundary is established prior to writing primary identity records.
-- Associated biometric profiles, medical preferences, and subscription metadata are written sequentially.
-- In the event of any operation failure, the transaction is automatically rolled back, returning the database to a known valid state and preventing orphaned records.
+### 👤 2. Member Interactive Suite
+- **Personalized Health Dashboard**: Real-time overview of current membership status, scheduled gym visits, booked coaching sessions, and daily caloric metrics.
+- **Biometric Profile Manager**: Interface for updating physical statistics (height, weight, body type, activity level) with instant body mass index (BMI) calculation feedback.
+- **Caloric & Nutrition Workspace**: Interactive calculator computing Basal Metabolic Rate (BMR), Total Daily Energy Expenditure (TDEE), and daily macro targets based on fitness goals.
+- **Fitness Plan Recommendation Interface**: Interactive wizard capturing user preferences and presenting tailored workout and diet plans.
+- **Coach Directory & Class Enrollment**: View available coach qualifications, enroll in training classes, manage class enrollments, and set workout alarm schedules.
+
+### 🏋️ 3. Coach Management Portal
+- **Client Roster Console**: View list of assigned active clients with direct access to client physical measurements and fitness progress.
+- **Direct Client Messaging**: Interface allowing coaches to dispatch direct email updates and training instructions to assigned clients.
+- **Coach Profile Workspace**: Maintain personal biographical data, contact details, physical metrics, and coaching qualifications.
+
+### 👑 4. Administrator Control Center
+- **Member Directory Console**: Comprehensive data management view for searching, filtering, inspecting, and archiving member accounts.
+- **Subscription & Payment Manager**: Monitor member subscription tiers, manage plan durations, and manually verify payment activations.
+- **Special Conditions Registry**: Track member medical conditions and physical restrictions for personalized safety monitoring.
+- **Staff Directory**: Register new coach profiles and maintain administrative staff accounts.
+
+---
+
+## 🧠 Backend Engineering & System Architecture
+
+### 1. Unified REST Front Controller Router
+The server handles request routing through a high-efficiency front controller pattern. Request paths are processed through server rewrite configuration into a central dispatcher that maps HTTP verbs (`GET`, `POST`, `PUT`, `DELETE`) to target domain models while enforcing global CORS headers and error boundary catches.
+
+### 2. Hybrid JWT Security with State-Persisted Revocation
+The API uses cryptographically signed `HS256` JSON Web Tokens containing user scope metadata, unique identifiers, and expiration dates. To allow immediate session termination upon logout, token signatures are stored in a persistent database blacklist store. Middleware queries this blacklist on every protected request to block revoked tokens instantly.
+
+### 3. ACID-Compliant Transaction Integrity
+Complex multi-entity actions—such as initializing member records alongside biometric details, subscription durations, and medical condition links—are wrapped in explicit database transactions. If any sub-operation fails, the transaction is automatically rolled back to prevent partial database state corruption.
 
 ---
 
 ## 🧮 Algorithmic & Mathematical Foundations
 
 ### 1. Basal Metabolic Rate (BMR) & Caloric Expenditure Engine
-The health calculation service implements the **Harris-Benedict Equation** tailored to biological sex characteristics:
+The health module evaluates user profile data using the sex-adjusted **Harris-Benedict Equation**:
 
 $$\text{BMR}_{\text{Male}} = 66 + (6.2 \times \text{weight}_{\text{lbs}}) + (13.7 \times \text{height}_{\text{cm}}) - (6.8 \times \text{age}_{\text{years}})$$
 
@@ -163,10 +194,10 @@ $$\text{BMR}_{\text{Female}} = 655 + (4.35 \times \text{weight}_{\text{lbs}}) + 
 - **Very Active**: $\text{TDEE} = \text{BMR} \times 1.725$
 - **Extra Active**: $\text{TDEE} = \text{BMR} \times 1.9$
 
-#### Target Caloric Adjustments:
-- **Weight Loss Objective**: $\text{Target Calories} = \text{TDEE} - 500\text{ kcal/day}$
-- **Weight Gain Objective**: $\text{Target Calories} = \text{TDEE} + 500\text{ kcal/day}$
-- **Maintenance Objective**: $\text{Target Calories} = \text{TDEE}$
+#### Caloric Target Adjustments:
+- **Weight Loss Goal**: $\text{Target Calories} = \text{TDEE} - 500\text{ kcal/day}$
+- **Weight Gain Goal**: $\text{Target Calories} = \text{TDEE} + 500\text{ kcal/day}$
+- **Maintenance Goal**: $\text{Target Calories} = \text{TDEE}$
 
 #### Macronutrient Yield Formulation:
 $$\text{Total Caloric Yield} = (\text{Protein}_{\text{grams}} \times 4) + (\text{Carbohydrates}_{\text{grams}} \times 4) + (\text{Fats}_{\text{grams}} \times 9)$$
@@ -174,102 +205,117 @@ $$\text{Total Caloric Yield} = (\text{Protein}_{\text{grams}} \times 4) + (\text
 ---
 
 ### 2. Multi-Attribute Recommendation Scoring
-The recommendation engine evaluates client compatibility against pre-established fitness regimens by computing an aggregate match score ($S$) across five normalized profile vectors:
+The recommendation algorithm computes a compatibility score ($S$) matching user profile attributes against candidate regimens across five normalized feature dimensions:
 
 $$S = \sum_{i=1}^{5} w_i \cdot \delta(U_i, R_i)$$
 
-Where $U_i$ represents the user attribute, $R_i$ represents the regime requirement, $w_i$ is the vector weight, and $\delta$ is an indicator function returning $1$ upon exact match and $0$ otherwise. Regimens are ordered by descending compatibility score to deliver optimal personalized plans.
+Where $U_i$ represents the user attribute, $R_i$ represents the regimen requirement, $w_i$ is the vector weight, and $\delta$ returns $1$ upon exact match and $0$ otherwise. Regimens are ordered by descending compatibility score to output the highest-ranked fitness plan.
 
 ---
 
 ## 🤖 Automated Background Processing Pipeline
 
-The platform integrates an automated background scheduling service designed for continuous operational maintenance and asynchronous task execution:
+An asynchronous background scheduling service operates in tandem with the API server for automated operational tasks:
 
-- **Lifecycle Expiration Monitoring**: Scans membership state boundaries and triggers proactive notification alerts prior to plan expiration.
-- **Session & Schedule Reminders**: Automated dual-party dispatching scheduled reminders to both clients and assigned coaches prior to confirmed sessions.
-- **Visit Scheduling Notifications**: Processes member-configured training schedules to send timely visit reminders.
-- **Automated Subscription Status Synchronizer**: Evaluates expired memberships on milestone dates and updates operational access status.
+- **Subscription Lifecycle Expiry Monitoring**: Detects memberships nearing expiration dates and sends automated email notices.
+- **Session & Schedule Reminders**: Sends scheduled dual-party reminder emails to both clients and coaches 24 hours prior to booked sessions.
+- **Gym Visit Notifications**: Processes member visit alarm preferences to dispatch day-of training reminders.
+- **Automated Subscription Status Synchronizer**: Evaluates expired memberships on milestone dates and updates system access status.
 
 ---
 
 ## 🗄️ Relational Data Architecture (Conceptual Model)
 
-The database schema is organized into modular conceptual data domains to enforce separation of concerns and maintain relational integrity:
+The database schema is organized into modular conceptual data domains to maintain relational separation of concerns:
 
-- **Identity & Access Management Domain**: Stores user credentials, authentication parameters, role assignments, and token revocation registries.
-- **Biometrics & Physical Health Domain**: Manages member physical metrics, height/weight histories, body composition classifications, activity levels, and medical condition associations.
-- **Subscription & Billing Lifecycle Domain**: Tracks active membership tiers, duration constraints, subscription start/expiry milestones, and payment states.
-- **Coaching & Roster Domain**: Manages coach profiles, specialization details, client-coach class pairings, and direct communication logs.
-- **Scheduling & Reminders Domain**: Handles gym visit alarm preferences and scheduled 1-on-1 coaching sessions.
-- **Knowledge & Recommendation Dataset Domain**: Contains curated workout plans, nutritional guidelines, and classification vectors for the recommendation engine.
+- **Identity & Access Management Domain**: Manages account credentials, user roles, security flags, and token revocation registries.
+- **Biometrics & Physical Health Domain**: Stores physical measurements, height/weight logs, body composition metrics, activity levels, and medical condition links.
+- **Subscription & Financial Lifecycle Domain**: Manages subscription plans, duration rules, billing milestones, and plan activation statuses.
+- **Coaching & Roster Domain**: Tracks coach qualifications, contact information, coach-client class assignments, and message logs.
+- **Scheduling & Reminders Domain**: Stores gym visit alarm configurations and booked 1-on-1 coaching sessions.
+- **Knowledge Base & Recommendation Domain**: Holds curated workout plans, nutritional guidelines, and classification vectors for recommendation matching.
 
 ---
 
 ## 🔒 Security Architecture & Vulnerability Mitigation
 
-Security controls are embedded throughout the application layer:
+System-wide security principles protect application data across both frontend and backend layers:
 
-- 🛡️ **Parameterized Data Access**: All database queries utilize PDO prepared statements with strict parameter binding, shielding the system against SQL Injection (SQLi) attacks.
-- 🔑 **Cryptographic Password Protection**: User credentials are protected using standard BCrypt password hashing algorithms. Plaintext credentials are never persisted or exposed in execution logs.
-- 🚫 **Session Revocation Guard**: Token blacklisting prevents replay attacks following user logout by maintaining a server-side record of revoked signatures.
-- 🔐 **Environment Configuration Security**: Critical system secrets, database connection parameters, and mailer credentials are managed via environment files excluded from public version control.
-- 🌐 **Access Control & CORS Isolation**: Dynamic CORS policies restrict resource access to authorized origins and enforce proper HTTP method scoping.
-- 🧹 **Context-Aware Output Sanitization**: User-supplied input is sanitized to protect against Cross-Site Scripting (XSS) vectors across notification templates.
+- 🛡️ **Parameterized Data Access**: Database interactions use PDO prepared statements with strict parameter binding to eliminate SQL Injection (SQLi) risks.
+- 🔑 **Cryptographic Password Protection**: Password credentials are hashed using standard BCrypt algorithms. Plaintext passwords are never logged or stored.
+- 🚫 **Token Revocation Guard**: Token blacklisting prevents replay attacks following user logout by maintaining a server-side registry of revoked signatures.
+- 🚦 **Client-Side & Server-Side Navigation Guards**: Dual-layer authorization checks prevent unauthorized route navigation on the client SPA and enforce endpoint permission checks on the API.
+- 🔐 **Isolated Environment Secrets**: Sensitive database connection credentials, JWT keys, and SMTP credentials are stored in environment configurations excluded from version control.
+- 🌐 **Strict CORS & Sanitization Policies**: Dynamic CORS policies restrict resource access to authorized origins, while output sanitization shields against Cross-Site Scripting (XSS) in notification templates.
 
 ---
 
-## 💻 Local Installation & Setup Guide
+## 💻 Full-Stack Installation & Setup Guide
 
 ### 1. Prerequisites
+- **Node.js**: Version 18+ and `npm`
 - **PHP**: Version 8.1+ (with `pdo_mysql` and `openssl` extensions enabled)
-- **Web Server**: Apache Server (with `mod_rewrite` module enabled)
+- **Web Server**: Apache Web Server (with `mod_rewrite` enabled)
 - **Database Engine**: MySQL Server 8.0+ / MariaDB
-- **Node.js**: Node.js v18+ & `npm`
 - **Composer**: PHP Dependency Manager
 
 ---
 
-### 2. Environment Configuration Setup
+### 2. Frontend Setup (Vue 3 Client)
 
-Create an environment configuration file (`.env`) in the backend root directory using the template below:
+1. **Navigate to Frontend Directory**:
+   ```bash
+   cd Frontend
+   ```
 
-```env
-# Database Configuration
-SERVER=127.0.0.1
-DBASE=your_database_name
-USER=your_db_username
-PASSWORD=your_db_password
+2. **Install Node Dependencies**:
+   ```bash
+   npm install
+   ```
 
-# Authentication Credentials
-SECRET_KEY=your_jwt_hmac_sha256_secret_key
+3. **Launch Development Server**:
+   ```bash
+   npm run dev
+   ```
 
-# Mailer Credentials
-googleSMTPpassword=your_smtp_app_password
-```
+4. **Build for Production**:
+   ```bash
+   npm run build
+   ```
 
 ---
 
-### 3. Dependency Installation
+### 3. Backend Setup (PHP 8 Server Engine)
 
-1. **PHP Packages**:
+1. **Configure Environment File**:
+   Create a `.env` file in `./Backend` using the template below:
+   ```env
+   # Database Credentials
+   SERVER=127.0.0.1
+   DBASE=your_database_name
+   USER=your_db_username
+   PASSWORD=your_db_password
+
+   # JWT Auth Secret
+   SECRET_KEY=your_jwt_hmac_sha256_secret_key
+
+   # SMTP Credentials
+   googleSMTPpassword=your_smtp_app_password
+   ```
+
+2. **Install PHP Dependencies**:
    ```bash
    cd Backend
    composer install
    ```
 
-2. **Background Task Packages**:
+3. **Install Task Runner Dependencies**:
    ```bash
    cd Backend
    npm install
    ```
 
----
-
-### 4. Application Execution
-
-1. **Web Server Host**: Configure Apache to point to the backend application root directory with `mod_rewrite` enabled.
-2. **Background Scheduler**: Launch the background worker script to process scheduled email tasks:
+4. **Run Background Worker**:
    ```bash
    cd Backend
    npm start
@@ -279,7 +325,7 @@ googleSMTPpassword=your_smtp_app_password
 
 ## 📝 Portfolio Author Note
 
-Engineered as a comprehensive backend architecture project demonstrating proficiency in object-oriented PHP 8 design, custom authentication protocols, mathematical calculation services, database transaction security, and automated background job processing.
+Developed as an end-to-end full-stack software project showcasing expertise in Vue 3 Single Page Application design, object-oriented PHP 8 REST API development, cryptographic security implementation, health calculation algorithms, relational database architecture, and automated background job scheduling.
 
 ---
 *Built with precision for Olympus Gym Management System.*
