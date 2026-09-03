@@ -12,14 +12,6 @@
 
 ---
 
-## 📌 Repository Summary (For GitHub Description)
-
-```text
-Full-stack Vue 3 & PHP 8 Gym Management System featuring Role-Based Access Control (RBAC), custom HMAC-SHA256 JWT auth with state-persisted token blacklisting, Harris-Benedict BMR/TDEE nutrition calculation engine, multi-factor recommendation system, automated background notifications, and PDO transactional database safety.
-```
-
----
-
 ## 📋 Executive Summary & Portfolio Overview
 
 The **Olympus Gym Management System** is a complete end-to-end software platform designed to digitize fitness center operations, member management, trainer client rosters, nutritional tracking, and scheduled communication.
